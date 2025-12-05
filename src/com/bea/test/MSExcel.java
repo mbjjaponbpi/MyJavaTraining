@@ -11,12 +11,12 @@ public class MSExcel extends Executable {
 	
 	@Override
 	public void stop() {
-		System.out.println("Stopping MS Excel");
+		System.out.println("Stopping MS Excel...");
 	}
 
 	@Override
 	public void run() {
-		System.out.println("Opening MS Excel");
+		System.out.println("Opening MS Excel...");
 	}
 
 }
