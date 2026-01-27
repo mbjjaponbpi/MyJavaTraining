@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%level] %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="DAILY_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- current log file-->>
+		<file>logs/bank-app.log</file>
+		
+		<!-- Rolling policy : daily -->>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/bank-app-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!--maxFileSize>10MB</maxFileSize-->
+			
+			<!-- Keep 30 days of logs-->>
+			<maxHistory>30</maxHistory>
+			
+			<!-- Max total size: 1GB -->>
+			<totalSizeCap>1GB</totalSizeCap>
+			
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<!-- HOURLY ROLLING SAMPLE -->
+	<!--  maxHistory - 7 days × 24 hours 
+	<appender name="HOURLY_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/application.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<fileNamePattern>logs/application-%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+		<maxHistory>168</maxHistory>
+		</rollingPolicy>
+		<encoder>
+		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	-->
+
+
+	<!-- SIZE-BASED ROLLING SAMPLE -->
+	<!-- Creates new file when size reaches maxFileSize
+	<appender name="SIZE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/application.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+		<fileNamePattern>logs/application-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+		<maxFileSize>10MB</maxFileSize>
+		<maxHistory>30</maxHistory>
+		<totalSizeCap>500MB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	-->
+
+
+	<!-- COMPRESSED ARCHIVE SAMPLE -->
+	<!-- Note: .gz - automatic compression. Old files automatically compressed to save space
+	<appender name="COMPRESSED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/application.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<fileNamePattern>logs/application-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+		<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] %logger - %msg%n</pattern>
+		</encoder>
+	</appender>
+	-->
+
+
+	<!-- *** FOR REFERENCE *** -->
+	
+	<!--  rolling policy common classes:
+		ch.qos.logback.core.rolling.TimeBasedRollingPolicy → Roll by time (daily, hourly, monthly, etc.)
+		ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy → Roll by BOTH time AND size
+	-->
+	
+	<!-- fileNamePattern 
+		Pattern for archived file name
+		Common Date/Time Patterns:
+			%d{yyyy-MM-dd} → Daily: app-2025-01-15.log
+			%d{yyyy-MM-dd-HH} → Hourly: app-2025-01-15-14.log
+			%d{yyyy-MM} → Monthly: app-2025-01.log
+			%d{yyyy-ww} → Weekly: app-2025-03.log
+	
+		Size-based pattern:
+			%i → Index: app-2025-01-15-0.log, app-2025-01-15-1.log
+		
+		Compression:
+			.gz → GZIP: app-2025-01-15.log.gz
+			.zip → ZIP: app-2025-01-15.log.zip
+			
+		samples:
+			<fileNamePattern>logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>logs/app-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+			<fileNamePattern>logs/app-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+		
+	-->
+
+	<!-- maxHistory
+		Number of archived files to keep (older files deleted)
+	
+		Unit depends on fileNamePattern:
+			Daily pattern → <maxHistory>30</maxHistory> → Keep 30 days
+			Hourly pattern → <maxHistory>168</maxHistory> → Keep 168 hours (7 days)
+			Monthly pattern → <maxHistory>12</maxHistory> → Keep 12 months (1 year)
+
+		Samples:
+			<maxHistory>7</maxHistory> → 1 week
+			<maxHistory>30</maxHistory> → 30 days
+			<maxHistory>90</maxHistory> → 90 days
+	-->
+
+	<!-- totalSizeCap
+		Maximum total disk space for all log files
+		Limits total disk space used by logs. When exceeded, oldest files automatically deleted
+	
+		size Units:
+			KB → Kilobytes
+			MB → Megabytes
+			GB → Gigabytes
+	
+		sample:
+			<totalSizeCap>100MB</totalSizeCap>
+			<totalSizeCap>1GB</totalSizeCap>
+			<totalSizeCap>10GB</totalSizeCap>
+	-->
+	
+	<!-- maxFileSize
+		Maximum size of each log file (for size-based rolling)
+		Create new file when current file reaches this size. Requires SizeAndTimeBasedRollingPolicy and %i in fileNamePattern
+	
+		Size Units:
+			KB → Kilobytes
+			MB → Megabytes
+			GB → Gigabytes
+		Samples:
+			<maxFileSize>10MB</maxFileSize>
+			<maxFileSize>50MB</maxFileSize>
+			<maxFileSize>100MB</maxFileSize>
+	-->
+
+
+	<root level="INFO">
+		<!-- refer to appender name/alias-->>
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="DAILY_FILE" />
+	</root>
+
+</configuration>
